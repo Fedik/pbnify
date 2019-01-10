@@ -13,52 +13,52 @@
  * # loadFile
  */
 angular.module('pbnApp')
-  .directive('loadFile', function () {
-    return {
-			restrict: 'A',
-			scope: {
-				imageLoaded: '&'
-			},
-			link: function(scope, elem, attr) {
-				elem = elem[0];
-				elem.ondragover = function() {
-					elem.style.borderColor = "black";
+    .directive('loadFile', function () {
+        return {
+            restrict: 'A',
+            scope: {
+                imageLoaded: '&'
+            },
+            link: function (scope, elem, attr) {
+                elem = elem[0];
+                elem.ondragover = function () {
+                    elem.style.borderColor = "black";
 
-					return false;
-				};
-				elem.ondragleave = function() {
-					elem.style.borderColor = '';// "4px dashed #777777";
+                    return false;
+                };
+                elem.ondragleave = function () {
+                    elem.style.borderColor = '';// "4px dashed #777777";
 
-					return false;
-				};
-				elem.ondrop = function (e) {
-				  e.preventDefault();
+                    return false;
+                };
+                elem.ondrop = function (e) {
+                    e.preventDefault();
 
-				  var file = e.dataTransfer.files[0];
-				  var reader = new FileReader();
-				  reader.onloadend = function (event) {
-				    scope.imageLoaded({img: event.target.result});
-				    scope.$apply();
-				  };
-				  reader.readAsDataURL(file);
+                    var file = e.dataTransfer.files[0];
+                    var reader = new FileReader();
+                    reader.onloadend = function (event) {
+                        scope.imageLoaded({img: event.target.result});
+                        scope.$apply();
+                    };
+                    reader.readAsDataURL(file);
 
-				  return false;
-				};
+                    return false;
+                };
 
-				var fileInput = document.getElementById('fileBrowser');
-				fileInput.addEventListener('change', function(e) {
-					var file = fileInput.files[0];
-					if (file.type.match(/image.*/)) {
-						var reader = new FileReader();
-						reader.onloadend = function(event) {
-							scope.imageLoaded({img: event.target.result});
-							scope.$apply();
-						};
-						reader.readAsDataURL(file);
-					} else {
-						alert("wrong file format");
-					}
-				});
-      }
-    };
-  });
+                var fileInput = document.getElementById('fileBrowser');
+                fileInput.addEventListener('change', function (e) {
+                    var file = fileInput.files[0];
+                    if (file.type.match(/image.*/)) {
+                        var reader = new FileReader();
+                        reader.onloadend = function (event) {
+                            scope.imageLoaded({img: event.target.result});
+                            scope.$apply();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert("wrong file format");
+                    }
+                });
+            }
+        };
+    });
