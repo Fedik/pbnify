@@ -53,8 +53,8 @@ body {
 
 #loader {
 	height: 300px;
-	/*border: 4px dashed gray;*/
-	border-radius: 10px;
+	border: 4px dashed gray;
+	/*border-radius: 10px;*/
 	font-size: 20px;
 	color: #777777;
 	text-align: center;
@@ -95,7 +95,7 @@ body {
 	margin-right: 10px;
 	-webkit-animation: spin 0.75s linear infinite;
     -moz-animation: spin 0.75s linear infinite;
-    animation: spin 0.75s linear infinite;	
+    animation: spin 0.75s linear infinite;
 }
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
@@ -160,7 +160,8 @@ body {
 }
 
 #canvases {
-	overflow: scroll;
+	border: 4px dashed rgb(119, 119, 119);
+	padding: 6px;
 }
 
 canvas {

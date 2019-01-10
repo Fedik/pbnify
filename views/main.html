@@ -13,7 +13,7 @@
 </div>
 
 
-<div class="col" id="loader" ng-show="step == 'load'" ng-style="loaderStyle" image-loaded="imageLoaded(img)" load-file>
+<div class="col" id="loader" ng-show="step == 'load'" image-loaded="imageLoaded(img)" load-file>
 	<p>Drop image here to load,<br>or browse for image.</p>
 	<div type="button" class="btn btn-default">
 		Browse
@@ -43,7 +43,8 @@
 
 
 <div class="col" id="palette">
-	<div class="swatch" ng-repeat="color in palette" ng-style="{ 'background-color': 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')' }">
+	<div class="swatch" ng-repeat="color in palette"
+		 ng-style="{ 'background-color': 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')' }">
 
 		<div class="swatch-label" ng-show="step == 'result' && (view == 'outline' || colorInfoVisible == true)">{{ $index + 1 }}</div>
 		<img ng-click="removeColor(color)" ng-show="step == 'select'" src="images/delete.png">
@@ -67,8 +68,9 @@
 <div class="col" id="canvases">
 	<div class="canvas-container" ng-show="step == 'select' || step == 'process'">
 		<canvas id="img-canvas" stage></canvas>
-		<div class="sample-point" ng-repeat="color in palette" ng-style="{ left: (color.x - 5) + 'px', top: (color.y - 5) + 'px' }"></div>
 
+		<div class="sample-point" ng-repeat="color in palette" ng-if="color.x > 0 && color.y > 0"
+			 ng-style="{ left: (color.x - 5) + 'px', top: (color.y - 5) + 'px' }"></div>
 	</div>
 
 	<div class="canvas-container" ng-show="step == 'result' && view == 'filled'">

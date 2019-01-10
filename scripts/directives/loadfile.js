@@ -22,12 +22,12 @@ angular.module('pbnApp')
 			link: function(scope, elem, attr) {
 				elem = elem[0];
 				elem.ondragover = function() {
-					elem.style.border = "4px dashed black";
+					elem.style.borderColor = "black";
 
 					return false;
 				};
 				elem.ondragleave = function() {
-					elem.style.border = "4px dashed #777777";
+					elem.style.borderColor = '';// "4px dashed #777777";
 
 					return false;
 				};
@@ -41,7 +41,6 @@ angular.module('pbnApp')
 				    scope.$apply();
 				  };
 				  reader.readAsDataURL(file);
-					elem.style.border = "4px dashed gray";
 
 				  return false;
 				};
