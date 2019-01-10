@@ -6,7 +6,7 @@
 
 <div class="col" id="description">
 	<p ng-class="{ 'other-step': step != 'load' }">1. Load an image
-		(preload pallet size <input ng-model="preloadPaletteSize.value" class="form-control palette-size-input" type="number" step="1">)</p>
+		(size of preloaded palette <input ng-model="preloadPaletteSize.value" class="form-control palette-size-input" type="number" step="1">)</p>
 	<p ng-class="{ 'other-step': step != 'select' }">2. Click some points on the image to select your color palette</p>
 	<p ng-class="{ 'other-step': step != 'select' || palette.length < 2 }">3. Click PBNify and the image will be converted to a paint by number template</p>
 	<p ng-class="{ 'other-step': step != 'result' }">4. Save the outline and palette, print them out, and paint/color</p>
