@@ -19,7 +19,9 @@ angular.module('pbnApp')
         $scope.step = "load";
         $scope.view = "";
         $scope.status = "";
+        $scope.statusProgress = 0;
         $scope.palette = [];
+        $scope.preloadPaletteSize = {value: 7};
         $scope.colorInfoVisible = false;
 
         var img;
@@ -43,10 +45,12 @@ angular.module('pbnApp')
         };
 
         $scope.preloadPalette = function () {
-            if (!img) return;
+            if (!img || $scope.preloadPaletteSize.value < 1) return;
 
             var colorThief = new ColorThief();
-            var palette = colorThief.getPalette(img, 18);
+            var palette = colorThief.getPalette(img, $scope.preloadPaletteSize.value, 1);
+            if (!palette.length) return;
+
             var color, item;
             for (var i = 0, l = palette.length; i < l; i++) {
                 item = palette[i];
@@ -236,11 +240,11 @@ angular.module('pbnApp')
 
         var getColorInfo = function (palette) {
             for (var i = 0; i < palette.length; i++) {
-                var col = palette[i];
-                col.hex = rgbToHex(col.r, col.g, col.b);
+                var col  = palette[i];
+                col.hex  = rgbToHex(col.r, col.g, col.b);
                 col.cmyk = rgbToCmyk(col.r, col.g, col.b);
-                col.hsl = rgbToHsl(col.r, col.g, col.b);
-                col.hsv = rgbToHsv(col.r, col.g, col.b);
+                col.hsl  = rgbToHsl(col.r, col.g, col.b);
+                col.hsv  = rgbToHsv(col.r, col.g, col.b);
             }
         };
 
@@ -253,8 +257,12 @@ angular.module('pbnApp')
 
             var worker = new Worker('scripts/processImage.js');
             worker.addEventListener('message', function (e) {
-                if (e.data.cmd == "status") {
+                if (e.data.cmd === "status") {
                     $scope.status = e.data.status;
+                    $scope.statusProgress = 0;
+                    $scope.$apply();
+                } else if (e.data.cmd === "progress") {
+                    $scope.statusProgress = e.data.progress;
                     $scope.$apply();
                 } else {
                     var matSmooth = e.data.matSmooth;

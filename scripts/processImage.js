@@ -23,18 +23,31 @@ var getVicinVals = function (mat, x, y, range) {	// range is how many pixels on 
 };
 
 var smooth = function (mat) {
-    var width = mat[0].length;
+    var width  = mat[0].length;
     var height = mat.length;
-    var simp = [];
+    var simp   = [];
+    var progress = 0, total = width * height, step = 0;
+
     for (var i = 0; i < height; i++) {
         simp[i] = new Array(width);
     }
+
     for (var y = 0; y < height; y++) {
         for (var x = 0; x < width; x++) {
             var vicinVals = getVicinVals(mat, x, y, 4);
             simp[y][x] = Number(_.chain(vicinVals).countBy().toPairs().maxBy(_.last).head().value());
+
+            step++;
+            progress = step / total * 100;
+            if ((progress % 5) === 0) {
+                self.postMessage({
+                    cmd: "progress",
+                    progress: progress
+                });
+            }
         }
     }
+
     return simp;
 };
 
@@ -64,14 +77,27 @@ var outline = function (mat) {
     var width = mat[0].length;
     var height = mat.length;
     var line = [];
+    var progress = 0, total = width * height, step = 0;
+
     for (var i = 0; i < height; i++) {
         line[i] = new Array(width);
     }
+
     for (var y = 0; y < height; y++) {
         for (var x = 0; x < width; x++) {
             line[y][x] = neighborsSame(mat, x, y) ? 0 : 1;
+
+            step++;
+            progress = step / total * 100;
+            if ((progress % 10) === 0) {
+                self.postMessage({
+                    cmd: "progress",
+                    progress: progress
+                });
+            }
         }
     }
+
     return line;
 };
 
@@ -189,6 +215,8 @@ var getLabelLocs = function (mat) {
         _.fill(covered[i], false);
     }
     var labelLocs = [];
+    var progress = 0, total = width * height, step = 0;
+
     for (var y = 0; y < height; y++) {
         for (var x = 0; x < width; x++) {
             if (covered[y][x] == false) {
@@ -200,8 +228,18 @@ var getLabelLocs = function (mat) {
                     removeRegion(mat, region);
                 }
             }
+
+            step++;
+            progress = step / total * 100;
+            if ((progress % 1) === 0) {
+                self.postMessage({
+                    cmd: "progress",
+                    progress: progress
+                });
+            }
         }
     }
+
     return labelLocs;
 };
 
@@ -211,16 +249,19 @@ self.addEventListener('message', function (e) {
         status: "smoothing edges..."
     });
     var matSmooth = smooth(e.data.mat);
+
     self.postMessage({
         cmd: "status",
         status: "identifying color regions..."
     });
     var labelLocs = getLabelLocs(matSmooth);
+
     self.postMessage({
         cmd: "status",
         status: "drawing outline..."
     });
     var matLine = outline(matSmooth);
+
     self.postMessage({
         cmd: "result",
         matSmooth: matSmooth,
